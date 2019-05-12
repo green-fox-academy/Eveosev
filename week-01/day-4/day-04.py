@@ -9,13 +9,12 @@ result1 = p.match(string1[::-1])
 print(result1)
 
 #Numbers below 100
-string2 = '0, 9, 55, 100, 101, -4'
-regex = '(\d+)'
+string2 = ['0', '9', '55', '100', '101', '-4']
+regex = '^[0-9]|(^[1-9][0-9]{1})|100'
 p = re.compile(regex)
-result2 = p.findall(string2)
-for i in range(len(result2)):
-    if int(result2[i]) >= 0 and int(result2[i]) <= 100:
-        print(f"{result2[i]}")
+for i in string2:
+    if p.search(i) != None:
+        print(i)
 
 #Hungarian mobile numbers
 mobile_nums = ['+36 20 473 2746',
@@ -27,16 +26,13 @@ mobile_nums = ['+36 20 473 2746',
                '+49 20 483 1273',
                '36 70 381 2183'
                ]
-regex1 = r'\+36\s\d{2}\s\d{3}\s\d{4}'
-p1_phonecheck = re.compile(regex1)
-regex2 = r'00 36\s\d{2}\s\d{3}\s\d{4}'
-p2_phonecheck = re.compile(regex2)
 
+regex1 = r'(\+36)?(00 36)?\s\d{2}\s\d{3}\s\d{4}'
+p_phonecheck = re.compile(regex1)
 for i in mobile_nums:
-    if p1_phonecheck.match(i) != None:
+    if p_phonecheck.match(i) != None:
         print(i)
-    elif p2_phonecheck.match(i) != None:
-        print(i) 
+
 
 
 #GFA email address
@@ -73,17 +69,12 @@ mobile_nums_44 = ['+44 20 473 2746',
                '44 70 381 2183'
                ]
 def mobilecheck(areacode, mobilelist):
-    regex_mobile1 = r'00 ' + str(areacode) +'\s\d{2}\s\d{3}\s\d{4}'
-    p1_mobilecheck = re.compile(regex_mobile1)
-    regex_mobile2 = r'\+' + str(areacode) + '\s\d{2}\s\d{3}\s\d{4}'
-    p2_mobilecheck = re.compile(regex_mobile2)
+    regex_mobile1 = r'[(\+)(00)]\s?44\s\d{2}\s\d{3}\s\d{4}'
+    p_mobilecheck = re.compile(regex_mobile1)
     print(f"Mobile numbers from area {areacode} are:")
     for i in mobilelist:
-        if p1_mobilecheck.search(i) != None:
+        if p_mobilecheck.search(i) != None:
             print(i)
-        elif p2_mobilecheck.search(i) != None:
-            print(i) 
-
 mobilecheck(44, mobile_nums_44)
 
 #Image sourse

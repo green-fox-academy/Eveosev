@@ -372,7 +372,8 @@ Alice['chicken breasts'] = 2
 Alice['apples'] = 1
 Alice['tomato'] = 10
 
-def sumpay(x, y, initial = 0):
+def sumpay(x, y):
+    initial = 0
     for key in x:
         initial = x[key] * y[key] + initial
     return initial
@@ -402,18 +403,14 @@ elif len(Bob) < len(Alice):
 else:
     print("Alice and Bob bought the same")
 
-def sumpiece(x, initial = 0):
-    for key in x:
-        initial = x[key] + initial
-    return initial
-
-if sumpiece(Bob) > sumpiece(Alice):
+if sum(list(Bob.values())) > sum(list(Alice.values())):
     print("Bob bought more products")
-elif sumpiece(Bob) < sumpiece(Alice):
+elif sum(list(Bob.values())) < sum(list(Alice.values())):
     print("Alice bought more products")
 else:
     print("Alice and Bob bought the same number of products")
 
+#To extract values in a dictionary, we can use list(map.values())
 
 
 
