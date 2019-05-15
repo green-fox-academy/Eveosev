@@ -1,5 +1,5 @@
 
-class Garden(Flower, Tree):
+class Garden():
     def __init__(self, flowers = ['yellow Flower', 'blue Flower'], trees = ['purple Tree', 'orange Tree'],
                  flowers_water_amount = [0,1], trees_water_amount = [0, 5]):
         self.flowers = flowers
@@ -14,7 +14,7 @@ class Garden(Flower, Tree):
             else:
                 print(f"The {self.flowers[i]} needs water")
         for i in range(len(self.trees_water_amount)):
-            if self.trees_water_amount[i] >= 5:
+            if self.trees_water_amount[i] >= 10:
                 print(f"The {self.trees[i]} dosen't need water")
             else:
                 print(f"The {self.trees[i]} needs water")
@@ -25,23 +25,18 @@ class Garden(Flower, Tree):
                  print(f"The {self.flowers[i]} dosen't need water")
              else:
                 self.flowers_water_amount[i] = self.flowers_water_amount[i] + 0.75 * amount
-                if self.flowers_water_amount[i] <= 5:
-                    print(f"The {self.flowers[i]} needs water")
-                else:
-                    print(f"The {self.flowers[i]} dosen't need water")
-  
+
     def watering_trees(self, amount):
         for i in range(len(self.trees_water_amount)):
              if self.trees_water_amount[i] >= 10:
                  print(f"The {self.trees[i]} dosen't need water")
              else:
                 self.trees_water_amount[i] = self.flowers_water_amount[i] + 0.4 * amount
-                if self.flowers_water_amount[i] <= 10:
-                    print(f"The {self.trees[i]} needs water")
-                else:
-                    print(f"The {self.trees[i]} dosen't need water")
+
 
 garden = Garden()
 garden.info()
 garden.watering_flowers(40)
+garden.info()
 garden.watering_trees(70)
+garden.info()
