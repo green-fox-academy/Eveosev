@@ -1,0 +1,2 @@
+class Hospital_class():
+    
