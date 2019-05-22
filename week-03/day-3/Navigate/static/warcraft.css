@@ -1,0 +1,13 @@
+body{
+    background-image: url("logo.svg" );
+    background-repeat: no-repeat;
+}
+
+h1 {
+    font-size: 150%;
+    text-align: center;
+}
+
+img {
+    margin: 0% auto;
+}

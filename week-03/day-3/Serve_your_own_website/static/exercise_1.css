@@ -1,0 +1,23 @@
+h1.Velox {
+    border: 7px solid rgb(7, 170, 7);
+    background-color: rgba(51, 185, 107, 0.781);
+    font-size:200%;
+    margin: 50px;
+
+}
+h2.Zerda {
+    border: 1px solid green;
+    background-color: rgba(240, 209, 107, 0.781);
+    font-size:200%;
+    margin: 50px;
+}
+h3.Lagopus {
+    border: 1px solid green;
+    background-color: rgba(107, 107, 240, 0.781);
+    font-size:200%;
+    margin: 50px;
+}
+div {
+width: 50%;
+margin:20%
+}
