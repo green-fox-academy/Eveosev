@@ -22,7 +22,6 @@ articles = [
     }
 ]
 
-
 @app.route("/articles")
 def list_articles():
     return render_template("articles.html", articles=articles)

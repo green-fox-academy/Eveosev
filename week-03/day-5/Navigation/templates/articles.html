@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Articles</title>
+</head>
+<body>
+    <div class = 'topnav'>
+        <a href="greet">Random Language</a>
+        <a href="greet2">Random Language2</a>
+        <a href="product">Products</a>
+        <a href="posts">Posts</a>
+        <a href="articles">Article</a>
+    </div>
+    {% for i in articles%}
+        <p>{{i['content'] | truncate(225)}}</p>
+        {% if i['seen'] | length >= 2 %}
+        <p>Seen by 
+            {% for j in i['seen'] %}
+                {% if loop.index < i['seen'] | length %} 
+                    {{j}}, 
+                {% endif %}
+            {% endfor %}
+            and {{i['seen'] | last}} 
+        </p>
+        {% elif i['seen'] | length == 1 %}
+        <p>Seen by {{i['seen'][0]}}</p>
+        {% else %}
+        <p>No one has seen this article before.</p>
+        {% endif %}
+    {% endfor %}
+</body>
+</html>

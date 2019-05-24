@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Products</title>
+</head>
+<body>
+    <div class = 'topnav'>
+        <a href="greet">Random Language</a>
+        <a href="greet2">Random Language2</a>
+        <a href="product">Products</a>
+        <a href="posts">Posts</a>
+        <a href="articles">Article</a>
+    </div>
+    <table>
+        <tr>
+            <th>#</th>
+            <th>Product</th>
+            <th>Price</th>
+        </tr>
+        
+        {% for i in range(3) %}
+        <tr>
+            <td>{{loop.index}}</td>
+            <td>{{p[i][0]}}</td>
+            <td>{{p[i][1] | round(2)}}</td>
+        </tr>
+        {% endfor %}  
+    </table>
+</body>
+</html>

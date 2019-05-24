@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Posts</title>
+</head>
+<body>
+    <div class = 'topnav'>
+        <a href="greet">Random Language</a>
+        <a href="greet2">Random Language2</a>
+        <a href="product">Products</a>
+        <a href="posts">Posts</a>
+        <a href="articles">Article</a>
+    </div>
+    <h1>Posts</h1>
+    {% for i in post[1] %}
+    <articale>
+        {% for j in post[0] %}
+            {% if i['author'] == j['id'] %}
+                <h1><a href="#p{{i['id']}}">{{j['name']}}¶{{i['id']}}</a></h1>  
+             {% endif %}
+        {% endfor %}
+        </h1>
+        <p>{{i['content']}}</p>
+        <!-- <p>Like by 
+            {% for j in post[0] %}
+                {% if i['id'] in j['likes']%}
+                    {{j['name']}},
+                {% endif %}
+            {% endfor %}
+        </p> -->
+        <p>
+            {% if i['id'] in post[0][0]['likes'] and i['id'] in post[0][1]['likes']%}
+            Like by {{post[0][0]['name']}}, {{post[0][1]['name']}}
+            {%elif i['id'] in post[0][0]['likes'] and i['id'] not in post[0][1]['likes']%}
+            Like by {{post[0][0]['name']}}
+            {%elif i['id'] not in post[0][0]['likes'] and i['id'] in post[0][1]['likes']%}    
+            Like by {{post[0][1]['name']}}
+            {% endif %}
+        </p>
+    </articale>
+    {% endfor %}
+</body>
+</html>

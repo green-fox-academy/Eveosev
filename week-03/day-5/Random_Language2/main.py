@@ -14,7 +14,7 @@ def greet():
     hello = hello_list[n_greet]
     n_name = random.randint(0,14)
     name = name_list[n_name]
-    return render_template('greetJohn.html', Hello = hello, Name = name)
+    return render_template('greetJohn2.html', Hello = hello, Name = name)
 
 if __name__ == '__main__':
     app.run()
