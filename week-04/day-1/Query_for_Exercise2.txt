@@ -1,0 +1,119 @@
+/* List the users who registered in 2018 with a .com email address and living in China*/
+SELECT *
+FROM  users
+WHERE EXTRACT (year FROM date_of_registration) = '2018'
+    AND email LIKE '%.com'
+    AND country = 'China';
+
+
+/* How many users are there?*/
+SELECT COUNT(*)
+FROM users;
+
+
+/*How many users registered in 2019?*/
+SELECT COUNT(*)
+FROM users
+WHERE EXTRACT (year FROM date_of_registration) = '2019';
+
+
+/*How many users registered in January?*/
+SELECT COUNT(*)
+FROM users
+WHERE EXTRACT (month FROM date_of_registration) = '01';
+
+
+/*Which country has the most users?*/
+SELECT country, count(*) AS Total
+FROM users
+GROUP BY country
+ORDER BY Total DESC
+LIMIT 1;
+
+
+/*What is the gender ratio?*/
+SELECT gender, ROUND(COUNT(*) ::DECIMAL/ (SELECT COUNT(*) FROM users) * 100, 2)
+FROM users
+GROUP BY gender
+HAVING gender IS NOT NULL;
+
+
+/*How many users left at least one field blank?*/
+SELECT COUNT(*)
+FROM users
+WHERE username IS NULL 
+    OR email IS NULL
+    OR date_of_registration IS NULL
+    OR first_name IS NULL
+    OR last_name IS NULL
+    OR country IS NULL
+    OR gender IS NULL;
+
+
+/*Which are the 4th and 5th cheapest products?*/
+SELECT * 
+FROM products 
+ORDER BY price
+LIMIT 2 OFFSET 3;
+
+
+/*What is the average price for an electric product?*/
+SELECT AVG(price)
+FROM products
+WHERE category = 'Electronics';
+
+
+/*How much would it cost me to buy all the toys?*/
+SELECT SUM(price)
+FROM products;
+
+
+/*What is the average rating?*/
+SELECT AVG(rating)
+FROM reviews;
+
+
+/*Which product has the best average rating?*/
+SELECT product_id, AVG(rating)
+FROM reviews
+GROUP BY product_id
+ORDER BY AVG(rating) DESC;
+
+
+/*Which product has the worst rating?*/
+SELECT product_id, rating
+FROM reviews
+WHERE rating = (SELECT MIN(rating) FROM reviews);
+
+
+/*Which products have no review?*/
+SELECT product_id, comment
+FROM reviews
+WHERE comment IS NULL;
+
+
+/*How many reviews are 3 or below without comment?*/
+SELECT *
+FROM reviews
+WHERE rating < 3
+    AND comment IS NULL;
+
+
+/*Which user reviewed the most?*/
+SELECT user_id, COUNT(*) AS Review_num
+FROM reviews
+GROUP BY user_id
+ORDER BY Review_num DESC
+LIMIT 2;
+
+
+/*List the average rating for each product*/
+SELECT product_id, AVG(rating)
+FROM reviews
+GROUP BY product_id;
+
+
+/*How many days passed since the last review?*/
+SELECT AGE(current_date, (SELECT date FROM reviews ORDER BY date DESC LIMIT 1));
+
+

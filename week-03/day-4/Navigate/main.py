@@ -41,6 +41,7 @@ def get_movies():
     response = jsonify(movie_info)
     return response
 
+#Be merged in the later code
 # @app.route('/api/<movie_id>')
 # def get_movie_byID(movie_id):
 #     with open('movie_info.txt') as m_txt:
