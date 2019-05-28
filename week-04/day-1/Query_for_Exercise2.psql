@@ -93,10 +93,11 @@ WHERE comment IS NULL;
 
 
 /*How many reviews are 3 or below without comment?*/
-SELECT *
+SELECT product_id, COUNT(*) AS Count_num
 FROM reviews
-WHERE rating < 3
-    AND comment IS NULL;
+WHERE Count_num < 3
+    AND comment IS NULL
+GROUP BY product_id;
 
 
 /*Which user reviewed the most?*/

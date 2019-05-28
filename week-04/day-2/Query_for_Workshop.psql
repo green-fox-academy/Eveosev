@@ -1,0 +1,150 @@
+--SQL Movie-Rating Query Exercises
+
+--Q1:
+SELECT title
+FROM Movie
+WHERE director = 'Steven Spielberg'
+
+--Q2
+SELECT DISTINCT year
+FROM Movie AS m
+LEFT JOIN Rating AS r
+    ON m.mID = r.mID
+WHERE stars >= 4
+ORDER BY year;
+
+--Q3
+SELECT title
+FROM Movie AS m
+LEFT JOIN Rating AS r
+    ON m.mID = r.mID
+WHERE stars IS NULL;
+
+--Q4
+SELECT name
+FROM Reviewer AS re
+LEFT JOIN Rating AS ra
+    ON re.rID = ra.rID
+WHERE ratingDate IS NULL;
+
+--Q5
+SELECT name, title, stars, ratingDate
+FROM Reviewer AS re
+LEFT JOIN Rating AS ra
+    ON re.rID = ra.rID
+LEFT JOIN Movie AS m
+    ON ra.mID = m.mID
+ORDER BY name, title, stars;
+
+--Q6
+SELECT name, title
+FROM Rating R1
+INNER JOIN RATING R2
+    ON R1.rid = R2.rid AND R1.mid = R2.mid
+LEFT JOIN Movie
+    ON R2.mID = Movie.mID
+LEFT JOIN Reviewer
+    ON R2.rID = Reviewer.rID
+WHERE R1.ratingDate > R2.ratingDate AND R1.stars > R2.stars;
+
+--Q7
+SELECT title, MAX(stars) AS max
+FROM Movie
+LEFT JOIN Rating
+    ON Movie.mID = Rating.mID
+WHERE stars IS NOT NULL
+GROUP BY title
+
+--Q8
+SELECT title, (MAX(stars) - MIN(stars)) AS diff
+FROM Movie
+LEFT JOIN Rating
+    ON Movie.mID = Rating.mID
+WHERE stars IS NOT NULL
+GROUP BY title
+ORDER BY diff DESC, title;
+
+--Q9
+SELECT ABS(Bb.avg_B - Aa.avg_A) AS difference
+FROM (SELECT AVG(avg) AS avg_B
+FROM (SELECT Movie.mID, AVG(stars) AS avg
+FROM Movie
+LEFT JOIN Rating
+    ON Movie.mID = Rating.mID
+WHERE year < 1980
+GROUP BY Movie.mID) B) Bb,
+(SELECT AVG(avg) AS avg_A
+FROM (SELECT Movie.mID, AVG(stars) AS avg
+FROM Movie
+LEFT JOIN Rating
+    ON Movie.mID = Rating.mID
+WHERE year > 1980
+GROUP BY Movie.mID) A) Aa;
+
+
+
+
+--The changes of code in question 6
+--oldest
+SELECT name, title
+FROM 
+(SELECT LAST.rid, LAST.mid
+FROM 
+(SELECT *
+FROM (SELECT *, ROW_NUMBER() OVER(PARTITION BY rid, mid ORDER BY ratingDate) AS ROW
+FROM (SELECT Temp.rid, Temp.mid, Rating.stars, Rating.ratingdate
+FROM (SELECT rid, mid
+FROM rating	
+GROUP BY rid, mid
+HAVING COUNT(*) = 2 ) Temp
+LEFT JOIN Rating
+	ON Temp.rid=Rating.rid AND Temp.mid=Rating.mid) T) P
+WHERE ROW = 2) LAST
+LEFT JOIN
+(SELECT *
+FROM (SELECT *, ROW_NUMBER() OVER(PARTITION BY rid, mid ORDER BY ratingDate) AS ROW
+FROM (SELECT Temp.rid, Temp.mid, Rating.stars, Rating.ratingdate
+FROM (SELECT rid, mid
+FROM rating
+GROUP BY rid, mid
+HAVING COUNT(*) = 2 ) Temp
+LEFT JOIN Rating
+	ON Temp.rid=Rating.rid AND Temp.mid=Rating.mid) T) P
+WHERE ROW = 1) OLD
+ON LAST.rid = OLD.rid 
+WHERE LAST.stars > OLD.stars) CON
+LEFT JOIN Movie
+ON CON.mid = Movie.mid 
+LEFT JOIN Reviewer
+ON CON.rid = Reviewer.rid
+
+--First updated
+SELECT name, title
+FROM
+(SELECT *
+FROM (SELECT *, ROW_NUMBER() OVER(PARTITION BY rid, mid ORDER BY ratingDate) AS ROW
+FROM Rating) T
+WHERE ROW = 2) R1
+INNER JOIN Rating
+    ON  R1.rid = Rating.rid AND R1.mid = Rating.mid
+LEFT JOIN Movie
+    ON Rating.mid = Movie.mid
+LEFT JOIN Reviewer
+    ON Rating.rid = Reviewer.rid
+WHERE Rating.ratingDate < R1.ratingDate AND Rating.stars < R1.stars;
+
+--Finally
+
+SELECT name, title
+FROM Rating R1
+INNER JOIN RATING R2
+    ON R1.rid = R2.rid AND R1.mid = R2.mid
+LEFT JOIN Movie
+    ON R2.mID = Movie.mID
+LEFT JOIN Reviewer
+    ON R2.rID = Reviewer.rID
+WHERE R1.ratingDate > R2.ratingDate AND R1.stars > R2.stars;
+
+--In this question, what I learn is :
+--1) In sql, comparing in columns is easier than comparting in rows
+--2) If we are going to compare two features under the same id, try to fix them in a row, and then compare in columns

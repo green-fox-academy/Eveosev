@@ -1,0 +1,111 @@
+--Q1
+--Method 1
+SELECT starttime
+FROM cd.members
+LEFT JOIN cd.bookings
+	ON cd.members.memid = cd.bookings.memid
+WHERE firstname = 'David' AND surname = 'Farrell';
+
+--Method 2 (Cool answer!!!!!)
+select bks.starttime
+        from
+                cd.bookings bks,
+                cd.members mems
+        where
+                mems.firstname='David'
+                and mems.surname='Farrell'
+                and mems.memid = bks.memid;
+
+
+--Q2
+--Method 1
+SELECT starttime, name
+FROM cd.bookings, cd.facilities
+WHERE cd.bookings.facid = cd.facilities.facid
+	AND name LIKE 'Tennis Court%'
+	AND EXTRACT(year FROM starttime) = '2012'
+	AND EXTRACT(month FROM starttime) = '09'
+	AND EXTRACT(day FROM starttime) = '21'
+ORDER BY starttime;
+
+
+--Method 2(Answer)
+select bks.starttime as start, facs.name as name
+	from 
+		cd.facilities facs
+		inner join cd.bookings bks
+			on facs.facid = bks.facid
+	where 
+		facs.facid in (0,1) and
+		bks.starttime >= '2012-09-21' and
+		bks.starttime < '2012-09-22'
+order by bks.starttime;  
+
+--Hint, when we choose a data on a specfic date,
+--      we can use '>= the date' and '< the next day'
+--UPDATED CODE
+SELECT starttime, name
+FROM cd.bookings, cd.facilities
+WHERE cd.bookings.facid = cd.facilities.facid
+	AND name LIKE 'Tennis Court%'
+	AND starttime >= '2012-09-21'
+    AND starttime < '2012-09-22'
+ORDER BY starttime;
+
+
+--Q3
+--Original method
+SELECT firstname, surname
+FROM cd.members AS mb
+WHERE memid IN
+    (SELECT recommendedby FROM cd.members
+        WHERE recommendedby IS NOT NULL)
+ORDER BY surname, firstname;
+
+--Answer
+select distinct recs.firstname as firstname, recs.surname as surname
+	from 
+		cd.members mems
+		inner join cd.members recs
+			on recs.memid = mems.recommendedby
+order by surname, firstname;  
+
+
+--Q4
+--Original code
+SELECT mem.firstname AS memfname, mem.surname AS memsname, mem2.firstname AS refname, mem2.surname AS recsname
+FROM cd.members mem
+LEFT JOIN cd.members mem2
+	ON mem.recommendedby = mem2.memid
+ORDER BY memsname, memfname;
+
+
+--Q5
+--Original code
+SELECT DISTINCT CONCAT(firstname, ' ', surname) AS member, name AS facility
+FROM cd.members mem
+LEFT JOIN cd.bookings b
+	ON mem.memid = b.memid
+LEFT JOIN cd.facilities f
+	ON b.facid = f.facid
+WHERE name LIKE 'Tennis Court%'
+ORDER BY member;
+
+
+--Learn from answer:
+--1) CONCAT(firstname, ' ', surname) = firstname || ' ' || surname
+--2) WHERE name LIKE 'Tennis Court%' = b.facid in (0,1)
+
+
+--Q6
+SELECT CONCAT(firstname, ' ', surname) AS member, name AS facility, 
+	CASE WHEN mem.memid = 0 THEN guestcost * slots WHEN mem.memid != 0 THEN membercost * slots END AS cost
+FROM cd.members mem, cd.bookings b, cd.facilities f
+WHERE mem.memid = b.memid 
+	AND b.facid = f.facid
+	AND starttime >= '2012-09-14'
+	AND starttime < '2012-09-15'
+	AND ((guestcost * slots > 30 AND mem.memid = 0)
+	OR (membercost * slots > 30 AND mem.memid != 0))
+ORDER BY cost DESC;
+
