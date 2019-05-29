@@ -109,3 +109,11 @@ WHERE mem.memid = b.memid
 	OR (membercost * slots > 30 AND mem.memid != 0))
 ORDER BY cost DESC;
 
+--Q7
+SELECT DISTINCT CONCAT(mem1.firstname, ' ', mem1.surname) AS member, 
+	   (SELECT CONCAT(mem2.firstname, ' ', mem2.surname) AS recommender
+			FROM cd.members mem2 
+			WHERE mem2.memid = mem1.recommendedby )
+FROM cd.members mem1
+ORDER BY member;
+
