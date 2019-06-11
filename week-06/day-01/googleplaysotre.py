@@ -138,7 +138,10 @@ gg_play_store.columns
 
 #Drop meaningless data
 notnull_gg_df = gg_play_store_u_reviews[gg_play_store_u_reviews.Translated_Review.notnull()]
-notnull_gg_df.groupby('App').count()['Translated_Review']
+grouped_data = notnull_gg_df.groupby('App').mean()
+notnull_gg_df.groupby('Sentiment ').median()
+rating_data = gg_play_store.groupby('App').mean()['Rating']
+
 
 grouped_data = gg_play_store.groupby('App').sum()[['Rating', 'Reviews']]
 grouped_data.to_csv('Reviews_statistics.csv')
