@@ -81,7 +81,7 @@ accuracy = sum(Survived_pre_mean == train$Survived) / length(train$Survived)
 
 #Test output
 #Prediction
-test_mean = data.frame('Age_mean_imputation' = impute(test$Age, mean))
+test_mean = data.frame('Age_mean_imputation' = impute(test$Age, median))
 test = cbind(test, test_mean)
 test_prob = predict(logistic_mean, test[c('Pclass', 'Sex', 'Age_mean_imputation', 'SibSp')], type = 'response')
 Survived_pre_mean_imputation = data.frame('PassengerId' = test$PassengerId, 'Survived' = as.numeric(test_prob > treshhold))
